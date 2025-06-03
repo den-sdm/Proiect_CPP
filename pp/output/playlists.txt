@@ -1,0 +1,5 @@
+Chill Vibes
+Sunset|Artist A|3.5
+Moonlight|Artist B|4.2
+Ratings:
+

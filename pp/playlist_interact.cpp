@@ -53,17 +53,31 @@ int main(int argc, char *argv[]) {
         std::cout << colorText("Song added.\n", 32);
     }
     else if (command == "remove_song" && argc == 4) {
-        std::string playlistName = argv[2];
-        int index = std::stoi(argv[3]);
-        for (auto &p : playlists) {
-            if (p.getName() == playlistName) {
+    std::string playlistName = argv[2];
+    int index = std::stoi(argv[3]);
+    bool found = false;
+
+    for (auto &p : playlists) {
+        if (p.getName() == playlistName) {
+            found = true;
+            auto songs = p.getSongs();  // get a copy or const reference
+            if (index >= 0 && index < static_cast<int>(songs.size())) {
                 p.removeSong(index);
-                break;
+                savePlaylists(playlists, filename);
+                std::cout << colorText("Song removed.\n", 32);  // Green
+            } else {
+                std::cerr << colorText("Error: Invalid song index. Playlist has " 
+                    + std::to_string(songs.size()) + " songs. Index strats from 0 if there are songs.\n", 31);  // Red
             }
+            break;
         }
-        savePlaylists(playlists, filename);
-        std::cout << colorText("Song removed.\n", 32);
     }
+
+    if (!found) {
+        std::cerr << colorText("Error: Playlist not found.\n", 31);  // Red
+    }
+}
+
     else if (command == "rate_playlist" && argc == 4) {
         std::string playlistName = argv[2];
         float rating = std::stof(argv[3]);

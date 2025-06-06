@@ -1,8 +1,13 @@
 Chill Vibes
-Sunset|Artist A|3.5
-Moonlight|Artist B|4.2
-Ratings:
+Ratings:4,5
 
 New
-Ratings:
+Sunset2|Artist R|3.5
+Moon|Artist I|4.2
+Ratings:4.4,5
+
+New Playlist
+Sun|Artist Z|3.5
+Pooltable|Artist P|4.2
+Ratings:2.4,5
 

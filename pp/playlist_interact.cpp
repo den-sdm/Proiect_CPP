@@ -23,17 +23,21 @@ struct Playlist
 std::vector<Playlist> loadPlaylists(const std::string &filename);
 void savePlaylists(const std::vector<Playlist> &playlists, const std::string &filename);
 
+std::string colorText(const std::string& text, int colorCode) {
+    return "\033[1;" + std::to_string(colorCode) + "m" + text + "\033[0m";
+}
+
 int main(int argc, char *argv[])
 {
     const std::string filename = "playlists.txt";
     std::vector<Playlist> playlists = loadPlaylists(filename);
 
     if (argc < 2 || std::string(argv[1]) == "help") {
-        std::cout << "Playlist Interaction Commands:\n";
-        std::cout << "  add_song <playlist> <title|artist|duration>    Add a song\n";
-        std::cout << "  remove_song <playlist> <index>                 Remove song by index\n";
-        std::cout << "  rate_playlist <playlist> <rating>              Rate a playlist (1.0 - 5.0)\n";
-        std::cout << "  help                                           Show this help message\n";
+        std::cout << colorText("Playlist Interaction Commands:\n", 34);
+        std::cout << colorText("  add_song <playlist> <title|artist|duration>    Add a song\n", 34);
+        std::cout << colorText("  remove_song <playlist> <index>                 Remove song by index\n", 34);
+        std::cout << colorText("  rate_playlist <playlist> <rating>              Rate a playlist (1.0 - 5.0)\n",34);
+        std::cout << colorText("  help                                           Show this help message\n", 34);
         return 0;
     }
 
@@ -57,7 +61,7 @@ int main(int argc, char *argv[])
                                               { return s.title == title && s.artist == artist; });
                 if (songExists)
                 {
-                    std::cout << "Error: Song already exists in the playlist.\n";
+                    std::cout << colorText("Error: Song already exists in the playlist.\n", 31);
                     return 1;
                 }
                 p.songs.push_back({title, artist, std::stof(durStr)});
@@ -66,11 +70,11 @@ int main(int argc, char *argv[])
         }
         if (!found)
         {
-            std::cout << "Error: Playlist not found.\n";
+            std::cout << colorText("Error: Playlist not found.\n", 31);
             return 1;
         }
         savePlaylists(playlists, filename);
-        std::cout << "Song added.\n";
+        std::cout << colorText("Song added.\n", 32);
     }
     else if (command == "remove_song" && argc == 4)
     {
@@ -85,7 +89,7 @@ int main(int argc, char *argv[])
             }
         }
         savePlaylists(playlists, filename);
-        std::cout << "Song removed.\n";
+        std::cout << colorText("Song removed.\n", 32);
     }
     else if (command == "rate_playlist" && argc == 4)
     {
@@ -93,7 +97,7 @@ int main(int argc, char *argv[])
         float rating = std::stof(argv[3]);
         if (rating < 1.0f || rating > 5.0f)
         {
-            std::cout << "Invalid rating. Must be between 1.0 and 5.0\n";
+            std::cout << colorText("Invalid rating. Must be between 1.0 and 5.0\n", 31);
             return 1;
         }
         for (auto &p : playlists)
@@ -105,11 +109,11 @@ int main(int argc, char *argv[])
             }
         }
         savePlaylists(playlists, filename);
-        std::cout << "Playlist rated.\n";
+        std::cout << colorText("Playlist rated.\n", 32);
     }
     else
     {
-        std::cout << "Invalid command.\n";
+        std::cout << colorText("Invalid command.\n", 31);
     }
 
     return 0;

@@ -50,12 +50,21 @@ int main(int argc, char *argv[]) {
         std::cout << colorText("Playlist created.\n",32);
     }
     else if (command == "delete_playlist" && argc == 3) {
-        playlists.erase(std::remove_if(playlists.begin(), playlists.end(), [&](const Playlist &p) {
-            return p.getName() == argv[2];
-        }), playlists.end());
-        savePlaylists(playlists, filename);
-        std::cout << colorText("Playlist deleted.\n", 32);
+        std::string playlistName = argv[2];
+        auto it = std::find_if(playlists.begin(), playlists.end(),
+                               [&](const Playlist &p) {
+                                   return p.getName() == playlistName;
+                               });
+    
+        if (it == playlists.end()) {
+            std::cerr << colorText("Error: Playlist '" + playlistName + "' not found.\n", 31); // red error
+        } else {
+            playlists.erase(it);
+            savePlaylists(playlists, filename);
+            std::cout << colorText("Playlist deleted.\n", 32); // green success
+        }
     }
+    
     else if (command == "list_playlists") {
         std::sort(playlists.begin(), playlists.end(), [](const Playlist &a, const Playlist &b) {
             return a.averageRating() > b.averageRating();
